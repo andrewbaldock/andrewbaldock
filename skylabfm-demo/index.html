@@ -2,11 +2,17 @@
 <html>
 <head>
     <title>Skylab FM demo version</title>
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+
+    <link id="mystyle" href="#" rel="stylesheet" type="text/css">
     <link href="css/longshadow.css" rel="stylesheet" type="text/css">
     <script data-main="js/start" src="js/lib/require.js"></script>
 </head>
 <body>
+    <script type="text/javascript">
+		var bustr = Math.round(new Date().getTime() / 1000);
+		var link = document.getElementById('mystyle');
+		link.href = 'css/style.css?bust=' + bustr;
+	</script>
 	<a href="/"><h1 class="longshadow">skylab fm</h1></a>
 	<p id="subtitle">soundcloud listening lounge</p>
     <div id="main">

@@ -94,7 +94,7 @@ h1 {
 }
 .field {
     height: 30px;
-    font-size: 25px;œ
+    font-size: 25px;
     line-height: 30px;
     font-family: 'Montserrat', sans-serif;
     color: #222;
@@ -103,7 +103,10 @@ input:focus {
     background-color: #ECF6FF;
 }
 #spinner {
-    background-color:rgba(100,100,100,0.2);
+    background-color:rgba(100,100,100,0.7);
+    position:fixed;
+    top:225px;
+    left:50%;
 }
 #thequery button {
     width: 59px;
@@ -500,7 +503,7 @@ em#userimg {
         width:650px;
     }
     #player-wrapper-sticky-wrapper, #player-wrapper {
-        height:height: 170px!important;
+        height: 170px!important;
     }
     #player iframe {
         height: 166px;

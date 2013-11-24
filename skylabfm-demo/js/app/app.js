@@ -22,18 +22,15 @@ define(function (require) {
         initialize: function () {
             this.initSpinner();
 
+
             this.dfAuth = new DfAuth();
             this.dfAuth.getDreamFactoryToken();
-            this.dfAuth.on('dreamfactory: authenticated', this.render);
+            this.dfAuth.on('dreamfactory: authenticated', this.showSearch);
 
             this.collection = new TrackCollection();
             this.collection.initialize();
             this.listenTo(this.collection, 'reset', this.showSearch)
         }, 
-
-        render: function () {
-            this.showSearch();
-        },
 
         startSearch: function (event) {
             $('#thequery').hide();
