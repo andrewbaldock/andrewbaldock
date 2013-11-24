@@ -1,0 +1,167 @@
+@import url(http://weloveiconfonts.com/api/?family=fontawesome);
+
+/* fontawesome */
+[class*="fontawesome-"]:before {
+  font-family: 'FontAwesome', sans-serif;
+}
+
+.clearfix {
+  *zoom: 1;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+
+
+a {text-decoration:none;
+	color:#C93682}
+h1,h2,h3{font-family:'Playball',sans-serif;}
+#top h1{font-size:40px;margin-top:20px;}
+#top h2{margin-top:-20px;}
+h3 {font-size:24px;line-height:24px;}
+.stripe {
+	width:100%;
+	background:url('images/effect_2.png');
+	display:block;
+}
+#ribbon {
+	display:block;
+	float:right;
+	margin-right:-50px;
+	height:68px;
+	margin-top:-30px;
+	background-color:rgba(201, 54, 130, 0.22);
+	width:330px;
+	     -moz-transform: rotate(5deg);  /* FF3.5+ */
+        -o-transform: rotate(5deg);  /* Opera 10.5 */
+        -webkit-transform: rotate(5deg);  /* Saf3.1+, Chrome */
+        transform: rotate(5deg);  /* CSS3 (for when it gets supported) */
+}
+#subhead {
+	font-style:italic;
+	color:#888;
+	font-size:13px;
+	color:#fff;
+}
+#nombre {
+	font-family:'Codystar',sans-serif;
+	font-size: 22px;
+	margin-top:-10px;
+	color:#fff;
+	}
+#container {
+	width:220px;
+	height:200px;
+}
+html {
+	text-align:center;
+	background:url('images/effect_binding_light.png');
+	padding:30px;
+	font-family:'Open Sans', sans-serif;
+}
+#intro{
+	display:block;
+	width:100%;
+	padding:10px;
+	
+	text-align:left!important;
+	}
+	#intro p {margin-top:-10px;}
+#outer-container {
+	display:block;
+	width:100%;
+	text-align:center;
+}
+a#speedup {
+	display:inner-block;
+	padding:10px 40px;
+	background:#E1259B;
+	color:#fff;
+	font-size:18px;
+	line-height:50px;
+	text-align:center;
+	margin-top:120px;
+	text-decoration:none;
+	font-weight:600;
+	font-family:'Open Sans', sans-serif;
+	border-radius:10px;
+}
+#unicorn {
+	display:inline-block;
+	width:184px;
+	height:240px;
+	background:url('images/unicorn.png') no-repeat;
+}
+.esplode {
+	background:url('images/unicorn2.png') no-repeat!important;
+}
+.chiclet {
+	color:#fff;
+	font-family:'Open Sans',sans-serif;
+	font-size:13px;
+	border:1px solid #888;
+	width:160px;
+	padding:10px;
+	margin-bottom:10px;
+	box-shadow:	-1px 3px 2px rgba(69, 69, 69, 0.80);
+	text-align:left;
+}
+.ui-draggable-dragging {
+	box-shadow:	-1px 8px 17px rgba(69, 69, 69, 0.60);
+}
+.big {
+	font-size:34px;
+}
+.bad {
+	font-size:30px;
+	display:block;
+	float:left;
+	padding:2px;
+	margin-right:10px;
+}
+.chiclet:hover .bad {
+	color:#FFE000;
+}
+.good {
+	font-size:30px;
+	display:block;
+	float:left;
+	padding:2px;
+	margin-right:10px;
+}
+#oldstack .chiclet {
+	border:3px dotted #F5DCE7;
+	background:rgb(250, 92, 92);
+}
+
+#newstack .chiclet {
+	border:3px dotted #B1E9B1;
+	background:rgb(47, 189, 81);
+}
+
+.stack {
+	width:180px;
+	padding:10px;
+	text-align:left;
+}
+#oldstack {
+}
+#newstack {
+}
+#notes {
+	width:600px;
+	padding:10px;
+	display:block;
+	background:#444;
+	color:#eee;
+}
+

@@ -1,0 +1,25 @@
+var baseurl = "https://dsp-song.cloud.dreamfactory.com/rest";
+var apikey = '?app_name=skylabfm';
+
+
+retrieve 
+baseurl + '/db/userSearches/' + aB.userid + apikey + '&fields=query', // wtf?
+
+baseurl + '/db/userSearches' + apikey + '&filter=userID%3D' + aB.dfrecid
+
+delete
+baseurl + '/db/userSearches/' + id + apikey
+
+create
+var item = {"record":[{"userid":aB.userid,"query":searchterm}]};
+url:baseurl + '/db/userSearches' + apikey,
+
+
+
+
+
+
+
+beforeSend: function (xhr) {
+								xhr.setRequestHeader('X-DreamFactory-Session-Token', aB.sessionId);
+						}
