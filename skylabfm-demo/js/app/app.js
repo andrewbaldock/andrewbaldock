@@ -79,8 +79,9 @@ define(function (require) {
             if (this.trackmodel.get('artwork_url'))
               var bg = "url('" + this.trackmodel.get('artwork_url') + "')";
                 
-            $('html').css('background-image', bg).css('background-size','34%')//.css('background-repeat','no-repeat');
-
+            $('html').css('background-image', bg).css('background-size','34%');
+            $('.track').removeClass('isPlaying');
+            $('.track.'+trackid).addClass('isPlaying');
         }
 
     }); 
