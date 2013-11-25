@@ -9,7 +9,8 @@ define(function (require) {
         Spinner         = require('spin'),
         Soundcloud      = require('soundcloud'),
         Track           = require('app/sc-track-model'),
-        TrackCollection = require('app/sc-track-collection');
+        TrackCollection = require('app/sc-track-collection'),
+        TrackView       = require('app/sc-track-view');
 
     return Backbone.View.extend({
 
@@ -29,7 +30,8 @@ define(function (require) {
 
             this.collection = new TrackCollection();
             this.collection.initialize();
-            this.listenTo(this.collection, 'reset', this.showSearch)
+            this.listenTo(this.collection, 'reset', this.showSearch);
+            this.trackList = [];
         }, 
 
         startSearch: function (event) {
@@ -41,7 +43,28 @@ define(function (require) {
         showSearch: function (event) {
             $('#spinner').hide();
             $('#thequery').fadeIn();
-            console.log(this.collection);            
+            if(event && this.collection){
+                this.showTracks();
+            }   
+        },
+
+        showTracks: function() {
+            var $listEl = $('#results', this.el);
+            this.clearTracks();
+            _.each(this.collection.models, function (track) {
+                console.log(track);
+                var trackView = new TrackView({model: track}).render();
+                this.trackList.push(trackView);
+                $listEl.append(trackView.el);
+            }, this);
+            $listEl.fadeIn();
+        },
+
+        clearTracks: function() {
+            _.each(this.trackList, function(item){
+                item.remove();
+            });
+            this.trackList = [];
         },
 
         initSpinner: function () {
