@@ -6,32 +6,32 @@ define(function (require) {
         Player          = require('player'),
         DfAuth          = require('app/df-auth-model'),
         JSON2           = require('json2'),
-        Spinner         = require('spin'),
+        Spinner         = require('app/spinner-view'),
         Soundcloud      = require('soundcloud'),
         Track           = require('app/sc-track-model'),
         TrackCollection = require('app/sc-track-collection'),
-        TrackView       = require('app/sc-track-view');
+        TrackView       = require('app/sc-track-view'),
+        SavedSearches   = require('app/df-search-collection');
 
     return Backbone.View.extend({
+
+        trackList: [],
 
         el: '#main',
 
         events: {
-            'submit form': 'startSearch'
+            'submit form': 'startSearch',
+            'click .track': 'clickTrack'
         },
 
         initialize: function () {
-            this.initSpinner();
-
+            this.spinner = new Spinner();
 
             this.dfAuth = new DfAuth();
-            this.dfAuth.getDreamFactoryToken();
-            this.dfAuth.on('dreamfactory: authenticated', this.showSearch);
+            this.dfAuth.on('dreamfactory: authenticated', this.initSearch);
 
             this.collection = new TrackCollection();
-            this.collection.initialize();
-            this.listenTo(this.collection, 'reset', this.showSearch);
-            this.trackList = [];
+            this.listenTo(this.collection, 'reset', this.showTracks);
         }, 
 
         startSearch: function (event) {
@@ -40,24 +40,23 @@ define(function (require) {
             this.collection.search(event.target[0].value);
         },
 
-        showSearch: function (event) {
+        initSearch: function (authmodel) {
             $('#spinner').hide();
             $('#thequery').fadeIn();
-            if(event && this.collection){
-                this.showTracks();
-            }   
+            this.savedSearches = new SavedSearches({auth:authmodel});
         },
 
-        showTracks: function() {
+        showTracks: function(event) {
+            $('#thequery').fadeIn();
             var $listEl = $('#results', this.el);
             this.clearTracks();
             _.each(this.collection.models, function (track) {
-                console.log(track);
                 var trackView = new TrackView({model: track}).render();
                 this.trackList.push(trackView);
                 $listEl.append(trackView.el);
             }, this);
-            $listEl.fadeIn();
+            $listEl.css('display','inline-block'); // inline-block centering, instead of show()
+            $('#spinner').hide();
         },
 
         clearTracks: function() {
@@ -67,28 +66,22 @@ define(function (require) {
             this.trackList = [];
         },
 
-        initSpinner: function () {
-            var opts = {
-              lines: 20, // The number of lines to draw
-              length: 5, // The length of each line
-              width: 16, // The line thickness
-              radius: 25, // The radius of the inner circle
-              corners: 1, // Corner roundness (0..1)
-              rotate: 0, // The rotation offset
-              direction: 1, // 1: clockwise, -1: counterclockwise
-              color: '#16A5CE', // #rgb or #rrggbb or array of colors
-              speed: 0.8, // Rounds per second
-              trail: 30, // Afterglow percentage
-              shadow: false, // Whether to render a shadow
-              hwaccel: false, // Whether to use hardware acceleration
-              className: 'spinner', // The CSS class to assign to the spinner
-              zIndex: 2e9, // The z-index (defaults to 2000000000)
-              top: 'auto', // Top position relative to parent in px
-              left: 'auto' // Left position relative to parent in px
-            };
-            var target = document.getElementById('spinner');
-            var spinner = new Spinner(opts).spin(target);
-        },
+        clickTrack: function (event) {
+            var trackid = event.currentTarget.dataset.trackid;
+            this.trackmodel = this.collection.get({id:trackid});
+            var url = 'http://api.soundcloud.com/tracks/' + trackid;
+            var sc_options = '&show_artwork=true&auto_play=true&show_comments=true&enable_api=true&sharing=true&color=00BCD3'
+              
+            var iframe = document.querySelector('#widget');
+            iframe.src = 'https://w.soundcloud.com/player/?url=' + url + sc_options;    
+            var nerp = SC.Widget(iframe);  
+            this.$('#player-wrapper').fadeIn();
+            if (this.trackmodel.get('artwork_url'))
+              var bg = "url('" + this.trackmodel.get('artwork_url') + "')";
+                
+            $('html').css('background-image', bg).css('background-size','34%')//.css('background-repeat','no-repeat');
+
+        }
 
     }); 
 

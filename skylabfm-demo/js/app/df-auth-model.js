@@ -5,16 +5,20 @@ define(function (require) {
 
     return Backbone.Model.extend({
 
+        initialize: function () {
+            this.getDreamFactoryToken();
+        },
+
         defaults: function() {
             return {
                 baseurl:   'https://dsp-skylabfm-demo.cloud.dreamfactory.com/rest',
                 apikey:    '?app_name=skylabfm-demo',
-                sessionID: ''
+                sessionId: ''
             };
         },
 
         getDreamFactoryToken: function () {
-            var me = this;
+            var me = this; // so we can pass in the scope
             $('#spinner').show();
             
             $.ajax({

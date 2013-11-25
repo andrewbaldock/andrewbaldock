@@ -1,6 +1,13 @@
 @import url(http://fonts.googleapis.com/css?family=Codystar|Montserrat|Exo:500italic);
 @import url(http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css);
 
+a, button, input, img, div {
+    transition: all 0.2s ease-in-out;
+}
+html {
+    transition: all 1.5s ease-in-out;
+}
+
 #playzoom{
     font-size:150px;
     color:white;
@@ -61,6 +68,7 @@ h1 {
     letter-spacing: 3px;
     margin-top:14px;
     padding:7px;
+    text-shadow: 1px 1px 1px white;
 }
 .inplay #subtitle {
     display:none;
@@ -88,8 +96,6 @@ h1 {
     font-size:18px;
     padding:20px;
     top:30px;
-}
-#help{
     display:none;
 }
 .field {
@@ -234,6 +240,7 @@ button:active {
 #thequery {
     display: none;
     height: 50px;
+    margin-top: 15px;
 }
 #main {
     margin-top: -30px;
