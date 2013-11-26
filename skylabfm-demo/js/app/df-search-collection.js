@@ -1,31 +1,36 @@
 define(function (require) {
 
-    var $        = require('jquery'),
-        _        = require('underscore'),
-        Backbone = require('backbone'),
-        DfAuth   = require('app/df-auth-model');
+    var $           = require('jquery'),
+        _           = require('underscore'),
+        Backbone    = require('backbone'),
+        DfAuth      = require('app/df-auth-model'),
+        SearchModel = require('app/df-search-model');
 
     return Backbone.Collection.extend({
+ 
+        initialize: function () {
+            this.model = new SearchModel();
+        },
 
-        initialize: function (authmodel) {
-            var sessionId = authmodel.auth.attributes.sessionId;
-
+        setup: function(auth){
+            this.auth = auth;
             $.ajaxSetup({ headers: { 
-                'X-DreamFactory-Session-Token': sessionId, 
-                'X-DreamFactory-Application-Name': 'skylabfm-demo'
+                'X-DreamFactory-Session-Token': auth.sessionId, 
+                'X-DreamFactory-Application-Name': auth.apikey
             }});
+            this.model.setup(auth);
 
-            this.model = Backbone.Model.extend({
-                defaults: {
-                    userid: 'test'
-                },
-                // urlRoot: aB.baseurl + "/db/searches"
-                // above not working, fix is: github.com/jashkenas/backbone/issues/789
-                url: function() {
-                    return  aB.baseurl + "/db/searches" + (this.has("id") ? "/" + this.get("id") : "");
-                }
-            });
-        }
+            // CUSTOMIZE: YOU should customize this URL to match your Dreamfactory DSP needs
+            this.url = auth.baseurl + "/db/searches?filter=userid%3D'" + auth.userid + "'&fields=id,query";
+        },
+
+        parse: function(data) {
+            _.each(data.record, function(search) {
+                var model = new SearchModel({id:search.id, query:search.query});
+                model.setup(this.auth);
+                this.add(model);
+            }, this);
+        },
 
     });
 

@@ -5,17 +5,19 @@ define(function (require) {
 
     return Backbone.Model.extend({
 
-        defaults: function() {
-            return {
-                artwork_url:    '',
-                id:             '',
-                title:          '',
-                waveform_url:   '',
-                user: {
-                    avatar_url:'',
-                    username:  ''
-                }
-            };
+        /* soundcloud track model
+         * a sampling of the track fields returned by the soundcloud api
+         ---------------------------------------------------------------- */
+
+        defaults:  {
+            artwork_url:    '',
+            id:             '',
+            title:          '',
+            waveform_url:   '',
+            user: {
+                avatar_url:'',
+                username:  ''
+            }
         }
 
     });
