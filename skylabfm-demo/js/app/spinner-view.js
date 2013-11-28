@@ -9,7 +9,7 @@ define(function (require) {
 
         el: "#spinner",
 
-        initialize: function () {
+        initialize: function () { // fires at creation.
             var opts = {
               lines: 20, // The number of lines to draw
               length: 5, // The length of each line

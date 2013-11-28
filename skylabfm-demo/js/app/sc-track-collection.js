@@ -7,9 +7,9 @@ define(function (require) {
 
         model: SoundcloudTrack,
 
-        initialize: function () {
+        initialize: function () {   // fires at creation.
             
-            /* YOU SHOULD CHANGE THESE VALUES to your own!!!
+            /* CONFIG: YOU SHOULD CHANGE THESE VALUES to your own!!!
              * get your own client ID here:
              * https://soundcloud.com/you/apps
             --------------------------------------------*/
@@ -22,9 +22,7 @@ define(function (require) {
         search: function (usrInput) {
             var me = this;
             SC.get('/tracks', { q: usrInput }, function(result) {
-                
-                // backbonejs.org/#Collection-reset
-                me.reset(result);
+                me.reset(result);   // backbonejs.org/#Collection-reset
             });   
         }
 

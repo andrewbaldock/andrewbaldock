@@ -1,7 +1,5 @@
-<% var bg = "background-image:url('" + model.get('artwork_url') ? model.get('artwork_url') : model.get('user.avatar_url') +  "');" %>
-
 <div class="track-wrap">
-	<div class="track <%= model.get('id') %>" data-trackid="<%= model.get('id') %>" style="background-image:url('<%= bg %>');">
+	<div class="track <%= model.get('id') %>" data-trackid="<%= model.get('id') %>" style="background-image:url('<%= model.get('art') %>');">
 		<div class="text"> 
 			<span> <%= model.get('user.username') %> </span>
 			<br>

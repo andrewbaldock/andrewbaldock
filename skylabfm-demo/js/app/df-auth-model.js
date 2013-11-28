@@ -9,7 +9,7 @@ define(function (require) {
          * uses a backbone model as a settings singleton to hold session info
          * ----------------------------------------------------------------- */
 
-        // CUSTOMIZE: YOU should update baseurl and apikey to match your DSP.
+        // CONFIG: YOU should update baseurl and apikey to match your DSP.
 
         defaults: {
             baseurl:    'https://dsp-skylabfm-demo.cloud.dreamfactory.com/rest',
@@ -18,7 +18,7 @@ define(function (require) {
             userid:     ''   // INFO: to match site users to their searches
         },
 
-        initialize: function () {
+        initialize: function () {   // fires at creation.
             this.setUserId();
             this.sync();
         },
@@ -31,11 +31,12 @@ define(function (require) {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({email:'andrewbaldock@yahoo.com',password:'p4ssw0rd'}),
-
-                // CUSTOMIZE: 
-                // Just above in 'data' I am using a special "system user" I set up in my dreamfactory.com dsp.
-                // This System User is barely-privileged to grant dreamfactory api authentication only; which
-                // is why I'm not stressed out about having this password exposed in code here. 
+                /* CONFIG: put your system user info above...if you want to go this route.
+                 * Here I am using a special "system user" I set up in my dreamfactory.com dsp.
+                 * This System User is barely-privileged to grant dreamfactory api authentication
+                 * only; which is why I'm not stressed out about having this password exposed in 
+                 * code here.  YMMV.
+                 * -----------------------------------------------------------------------------*/ 
 
                 success: function (response) {
                     me.set({sessionId:response.session_id});
@@ -51,7 +52,7 @@ define(function (require) {
         },
 
         setUserId: function () {
-            // todo: use localstorage?
+            // todo: use localstorage?  get off my lawn...
             var uid = this.readCookie('skylabfm');
             if (uid == null) {
                 var date = new Date;

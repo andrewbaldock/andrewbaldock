@@ -16,30 +16,42 @@ define(function (require) {
 
     return Backbone.View.extend({
 
+        /* App.js 
+         * Primary clockwork for the skylab-fm demo app
+         * This is a Backbone View, see backbonejs.org for deeper understanding
+         ---------------------------------------------------------------------- */
+
         trackList: [],
+        // CONFIG: soundcloud player customizable options here
         sc_options: '&show_artwork=true&auto_play=true&show_comments=true&enable_api=true&sharing=true&color=00BCD3',
 
         el: '#main',
 
         events: {
             'submit form': 'doSearch',
-            'click .track': 'clickTrack'
+            'click .track': 'clickTrack',
+            'click #searchclear': 'clearQuery'
         },
 
-        initialize: function () {
+        initialize: function () {    // fires at creation.
             $('#offline').remove();
             this.spinner = new Spinner();
 
             this.dfAuth = new DfAuth();
-            this.listenTo(this.dfAuth, 'dreamfactory: authenticated', this.initSearch);
+           /* INFO: we are using Backbone eventing to catch asynchronous responses.  Creating a new DfAuth() 
+            * above instantiates the DfAuth class ;asynchronously.  When DfDtuh has finished getting a token 
+            * from dreamfactory it fires an event.  The next statement listens for that event to continue the 
+            * logic. */
+            this.listenTo(this.dfAuth, 'dreamfactory: authenticated', this.initSearch); 
 
             this.collection = new TrackCollection();
             this.listenTo(this.collection, 'reset', this.showTracks);
         }, 
 
         initSearch: function (authmodel) {
+            // TODO: build a "refresh token" system
             console.log("dreamfactory: authenticated");
-            this.stopListening(this.dfAuth, 'dreamfactory: authenticated');
+            //this.stopListening(this.dfAuth, 'dreamfactory: authenticated');
             this.auth = authmodel.attributes;
             $('#spinner').hide();
             $('#thequery').fadeIn();
@@ -56,19 +68,23 @@ define(function (require) {
 
         showTracks: function(event) {
             var $listEl = $('#results', this.el);
+
+            // INFO: we can keep the scope of this view inside the below closure... -> (continues..)
             _.each(this.collection.models, function (track) {
+                track.setArtwork();
                 var trackView = new TrackView({model: track}).render();
                 this.trackList.push(trackView); 
                 $listEl.append(trackView.el);
-            }, this);
+            }, this);  //  <-- .... by passing in 'this' here, thanks to Underscore '_.each()' function!
 
-            $listEl.css('display','inline-block'); // inline-block centering, instead of show()
+            // INFO: would usually just show() here, but we are using inline-block centering, so do that instead.
+            $listEl.css('display','inline-block'); 
             $('#spinner').hide();
         },
 
         clearTracks: function() {
             _.each(this.trackList, function(item){
-                item.remove();
+                item.remove();  // INFO: this properly releases the event bindinds onthe subviews.
             });
             this.trackList = [];
         },
@@ -87,6 +103,10 @@ define(function (require) {
             $('html').css('background-image', "url('" + this.trackmodel.get('artwork_url') + "')").css('background-size','34%');
             this.$('#player-wrapper').fadeIn();
             this.$('.track.'+trackid).addClass('isPlaying');
+        },
+
+        clearQuery: function(){
+            $('#query').val('');
         }
 
     }); 

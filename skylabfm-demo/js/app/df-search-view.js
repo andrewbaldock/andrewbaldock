@@ -19,13 +19,14 @@ define(function (require) {
             'click .delete':  'deleteSearch'
         },
         
-        initialize: function(auth){
+        initialize: function(auth){ // fires at creation.
             this.auth = auth;
             this.collection = new SearchCollection();
-            this.listenTo(this.collection, 'reset', this.renderList);
+            this.listenTo(this.collection, 'sync', this.renderList);
         },
 
         render: function(){
+            console.log('render');
             if(!this.collection.auth) 
                 this.collection.setup(this.auth);
             this.collection.fetch({reset:true});
@@ -52,19 +53,21 @@ define(function (require) {
                 var model = new SearchModel();
                 model.setup(this.auth);
                 model.set({query:query, userid:this.auth.userid});
-                this.collection.create(model);
-                this.renderList();
+                model.save();
+                this.collection.add(model);
+                this.collection.fetch({reset:true});
             }
         },
 
         deleteSearch: function(event) {
             event.preventDefault();
-            
             var id = event.currentTarget.parentElement.dataset.id;
+            var query = $(event.currentTarget.parentElement).find('.asearch').text();
             var deadmodel = this.collection.get(id);
-            deadmodel.destroy();
-            this.collection.remove(deadmodel);
-
+            if(deadmodel) {
+            	deadmodel.destroy();
+            	this.collection.remove(deadmodel);
+            }
             $(event.target).parent('div').fadeOut(300,function() {
                 $(this).remove();
             });

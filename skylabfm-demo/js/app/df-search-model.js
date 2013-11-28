@@ -5,7 +5,7 @@ define(function (require) {
 
     return Backbone.Model.extend({
 
-        initialize: function(auth) {
+        initialize: function(auth) {    // fires at creation.
             if(auth)
                 this.setup(auth) 
         },

@@ -3,12 +3,11 @@ define(function (require) {
     var $           = require('jquery'),
         _           = require('underscore'),
         Backbone    = require('backbone'),
-        DfAuth      = require('app/df-auth-model'),
         SearchModel = require('app/df-search-model');
 
     return Backbone.Collection.extend({
  
-        initialize: function () {
+        initialize: function () {   // fires at creation.
             this.model = new SearchModel();
         },
 
