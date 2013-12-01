@@ -21,6 +21,10 @@ define(function (require) {
         initialize: function () {   // fires at creation.
             this.setUserId();
             this.sync();
+            var me = this;
+            setInterval(function(){
+                me.sync();
+            },600000); // 10 minutes -- keeps the sessin alive in the browser
         },
 
         sync: function() {

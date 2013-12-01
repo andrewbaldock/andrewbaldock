@@ -22,11 +22,10 @@ define(function (require) {
         initialize: function(auth){ // fires at creation.
             this.auth = auth;
             this.collection = new SearchCollection();
-            this.listenTo(this.collection, 'sync', this.renderList);
+            this.listenTo(this.collection, 'reset', this.renderList);
         },
 
         render: function(){
-            console.log('render');
             if(!this.collection.auth) 
                 this.collection.setup(this.auth);
             this.collection.fetch({reset:true});

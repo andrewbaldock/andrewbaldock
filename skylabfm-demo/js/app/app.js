@@ -49,13 +49,15 @@ define(function (require) {
         }, 
 
         initSearch: function (authmodel) {
-            // TODO: build a "refresh token" system
+
             console.log("dreamfactory: authenticated");
-            //this.stopListening(this.dfAuth, 'dreamfactory: authenticated');
-            this.auth = authmodel.attributes;
+           
             $('#spinner').hide();
             $('#thequery').fadeIn();
-            this.savedsearchview = new SavedSearchView(authmodel.attributes);
+            if(!this.savedsearchview)
+                this.savedsearchview = new SavedSearchView(authmodel.attributes);
+            else
+                this.savedsearchview.initialize(authmodel.attributes);
             this.savedsearchview.render();
         },
 
@@ -68,7 +70,7 @@ define(function (require) {
 
         showTracks: function(event) {
             var $listEl = $('#results', this.el);
-
+            var me = this;
             // INFO: we can keep the scope of this view inside the below closure... -> (continues..)
             _.each(this.collection.models, function (track) {
                 track.setArtwork();
@@ -80,6 +82,15 @@ define(function (require) {
             // INFO: would usually just show() here, but we are using inline-block centering, so do that instead.
             $listEl.css('display','inline-block'); 
             $('#spinner').hide();
+
+            //play first track
+            setTimeout(function(){
+                me.playNext();
+            },500);
+        },
+
+        playNext: function() {
+            $('.unplayed:first').removeClass('unplayed').click();
         },
 
         clearTracks: function() {
@@ -89,18 +100,31 @@ define(function (require) {
             this.trackList = [];
         },
 
+        setBackground: function() {
+            $('html').css('background-image', "url('" + this.trackmodel.get('art') + "')").css('background-size','34%');
+        },
+
         clickTrack: function (event) {
+            if(this.player)
+                this.player.unbind(SC.Widget.Events.FINISH, function(eventData) {});
             $('.track').removeClass('isPlaying');
+
             var trackid = event.currentTarget.dataset.trackid;   // 'dataset'?  http://api.jquery.com/data/
             var url     = 'http://api.soundcloud.com/tracks/' + trackid;
             var iframe  = document.querySelector('#widget');
             iframe.src  = 'https://w.soundcloud.com/player/?url=' + url + this.sc_options;  
 
-            var TODO    = SC.Widget(iframe);  // with SC.Widget we can listen to when the iframe says the song is done
             this.trackmodel = this.collection.get({id:trackid});
-
-            // TODO: model should supply right artwork if no images
-            $('html').css('background-image', "url('" + this.trackmodel.get('artwork_url') + "')").css('background-size','34%');
+            this.player = SC.Widget(iframe);  // with SC.Widget we can listen to when the iframe says the song is done
+            
+            var me = this;
+            setTimeout(function(){
+                me.player.bind(SC.Widget.Events.FINISH, function(eventData) {
+                    me.playNext();
+                });
+            },5000); 
+            
+            this.setBackground();
             this.$('#player-wrapper').fadeIn();
             this.$('.track.'+trackid).addClass('isPlaying');
         },
