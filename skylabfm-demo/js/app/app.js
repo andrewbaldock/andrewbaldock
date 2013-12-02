@@ -49,9 +49,7 @@ define(function (require) {
         }, 
 
         initSearch: function (authmodel) {
-
             console.log("dreamfactory: authenticated");
-           
             $('#spinner').hide();
             $('#thequery').fadeIn();
             if(!this.savedsearchview)
@@ -66,14 +64,21 @@ define(function (require) {
             this.clearTracks();
             this.collection.search(event.target[0].value);
             this.savedsearchview.saveSearch(event.target[0].value);
+            var me = this;
+            setTimeout(function(){
+                me.savedsearchview.render();
+            }, 500);
         },
 
         showTracks: function(event) {
             var $listEl = $('#results', this.el);
             var me = this;
+            this.i = 0;
             // INFO: we can keep the scope of this view inside the below closure... -> (continues..)
             _.each(this.collection.models, function (track) {
                 track.setArtwork();
+                this.i++;
+                track.counter = this.i;
                 var trackView = new TrackView({model: track}).render();
                 this.trackList.push(trackView); 
                 $listEl.append(trackView.el);
@@ -85,12 +90,18 @@ define(function (require) {
 
             //play first track
             setTimeout(function(){
-                me.playNext();
+                me.playTrack(1);
             },500);
         },
 
+        playTrack: function(id) {
+            var countClass = '.' + id;
+            this.playing = id;
+            $(countClass).removeClass('unplayed').click();
+        },
+
         playNext: function() {
-            $('.unplayed:first').removeClass('unplayed').click();
+            this.playTrack(this.playing + 1);
         },
 
         clearTracks: function() {
@@ -109,7 +120,7 @@ define(function (require) {
                 this.player.unbind(SC.Widget.Events.FINISH, function(eventData) {});
             $('.track').removeClass('isPlaying');
 
-            var trackid = event.currentTarget.dataset.trackid;   // 'dataset'?  http://api.jquery.com/data/
+            var trackid = event.currentTarget.dataset.trackid;
             var url     = 'http://api.soundcloud.com/tracks/' + trackid;
             var iframe  = document.querySelector('#widget');
             iframe.src  = 'https://w.soundcloud.com/player/?url=' + url + this.sc_options;  
@@ -122,11 +133,14 @@ define(function (require) {
                 me.player.bind(SC.Widget.Events.FINISH, function(eventData) {
                     me.playNext();
                 });
-            },5000); 
+            },1500); 
             
             this.setBackground();
             this.$('#player-wrapper').fadeIn();
-            this.$('.track.'+trackid).addClass('isPlaying');
+
+            this.track = this.$('.track.'+trackid);
+            this.track.addClass('isPlaying');
+            this.playing = this.track.data('trackcounter');
         },
 
         clearQuery: function(){

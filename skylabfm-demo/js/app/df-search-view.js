@@ -60,6 +60,7 @@ define(function (require) {
 
         deleteSearch: function(event) {
             event.preventDefault();
+            $(event.target).parent('div').fadeOut('slowest');
             var id = event.currentTarget.parentElement.dataset.id;
             var query = $(event.currentTarget.parentElement).find('.asearch').text();
             var deadmodel = this.collection.get(id);
@@ -67,9 +68,6 @@ define(function (require) {
             	deadmodel.destroy();
             	this.collection.remove(deadmodel);
             }
-            $(event.target).parent('div').fadeOut(300,function() {
-                $(this).remove();
-            });
         },
 
     }); 

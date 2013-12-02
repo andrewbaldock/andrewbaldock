@@ -21,7 +21,7 @@ html {
 html {
     font-family: 'Montserrat', sans-serif;
     text-align: center;
-    background: url('../img/blu_stripes.png') #fff;
+    background: url('blu_stripes.png') #fff;
     background-attachment: fixed;
     color: #979797;
     padding:0px;
